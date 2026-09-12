@@ -1,0 +1,38 @@
+# Secrets. Never commit.
+.env
+calibration.local.json
+
+# Big media. Fetched by tools/fetch_media.sh, never stored in the repo.
+media/
+*.mov
+*.webm
+*.aif
+*.wav
+*.mp4
+
+# Working files: decoded audio, sampled frames, the model's answers.
+.cache/
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+
+# Android
+app/build/
+app/.gradle/
+app/local.properties
+*.apk
+
+# ...except the subtitle file, which is small and needed to reproduce a run.
+!media/*.srt
+
+# The bundled demo film, copied in by tools/fetch_media.sh.
+app/app/src/main/assets/film.mp4
+
+# Gradle
+app/.gradle/
+app/build/
+app/app/build/
+.gradle/

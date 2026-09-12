@@ -1,0 +1,343 @@
+{
+  "film": "Tears of Steel",
+  "duration": 734.167,
+  "generator": {
+    "writer": "gemini:gemini-flash-lite-latest",
+    "frames_per_slot": 3,
+    "policy": {
+      "lead_in": 0.4,
+      "lead_out": 0.8,
+      "minimum": 1.6,
+      "longest": 12.0,
+      "rest": 3.0
+    },
+    "calibration": {
+      "overhead": 0.28,
+      "per_syllable": 0.196,
+      "per_pause": 0.22,
+      "safety": 1.08,
+      "source": "default"
+    },
+    "sources": [
+      "subtitles",
+      "audio"
+    ]
+  },
+  "stats": {
+    "duration_seconds": 734.17,
+    "dialogue_seconds": 160.92,
+    "silent_seconds": 573.25,
+    "silent_share": 0.7808,
+    "slots": 48,
+    "speaking_budget_seconds": 440.62,
+    "sources": [
+      "subtitles",
+      "audio"
+    ],
+    "lines_written": 36,
+    "lines_skipped_by_writer": 11,
+    "lines_dropped_as_too_long": 1,
+    "lines_rewritten_shorter": 7,
+    "lines_rewritten_without_a_premature_name": 1,
+    "lines_dropped_as_spoilers": 0,
+    "lines_trimmed_to_fit": 1,
+    "words_spoken": 594,
+    "speaking_seconds": 221.29,
+    "share_of_silence_used": 0.386,
+    "smallest_headroom_seconds": 0.026,
+    "audio_speech_seconds": 95.79,
+    "audio_stem_separation_db": 10.84,
+    "collisions_with_measured_speech": 0,
+    "collision_detail": []
+  },
+  "lines": [
+    {
+      "start": 9.89,
+      "budget": 12.0,
+      "text": "Massive rocket engines ignite, blasting intense white fire upward among towering industrial scaffolds against a pale, hazy sky.",
+      "estimated_seconds": 8.424,
+      "measured_seconds": 0.0,
+      "trimmed": false
+    },
+    {
+      "start": 53.9,
+      "budget": 6.25,
+      "text": "A glowing wire-frame human brain rests on a dish, surrounded by pink energy rings.",
+      "estimated_seconds": 5.223,
+      "measured_seconds": 0.0,
+      "trimmed": false
+    },
+    {
+      "start": 63.4,
+      "budget": 12.0,
+      "text": "The title card fades to black, revealing an elevated open-air room cluttered with heavy cables, pillars, and large bells hanging from the ceiling.",
+      "estimated_seconds": 9.508,
+      "measured_seconds": 0.0,
+      "trimmed": false
+    },
+    {
+      "start": 78.4,
+      "budget": 12.0,
+      "text": "A man aims a large sniper rifle from a ruined balcony, peering through the scope at an industrial airship hovering in the hazy sky.",
+      "estimated_seconds": 8.398,
+      "measured_seconds": 0.0,
+      "trimmed": false
+    },
+    {
+      "start": 93.4,
+      "budget": 12.0,
+      "text": "Nearby, another man lies asleep with a newspaper covering his face while the sniper watches the airship glide over rooftops through his scope.",
+      "estimated_seconds": 8.61,
+      "measured_seconds": 0.0,
+      "trimmed": false
+    },
+    {
+      "start": 119.4,
+      "budget": 10.799,
+      "text": "The older man sits up, removes the newspaper, and rubs his stiff neck as the sniper continues watching through his scope.",
+      "estimated_seconds": 7.366,
+      "measured_seconds": 0.0,
+      "trimmed": false
+    },
+    {
+      "start": 138.4,
+      "budget": 12.0,
+      "text": "The older man stands, gripping a hanging rope, while the sniper takes a sip from a yellow juice carton.",
+      "estimated_seconds": 6.731,
+      "measured_seconds": 0.0,
+      "trimmed": false
+    },
+    {
+      "start": 153.4,
+      "budget": 12.0,
+      "text": "The older man hauls on the thick rope, lifting a younger man dangling against a massive pipe organ before turning away to look across the dusty floor.",
+      "estimated_seconds": 9.033,
+      "measured_seconds": 0.0,
+      "trimmed": false
+    },
+    {
+      "start": 168.4,
+      "budget": 12.0,
+      "text": "The older man walks across the industrial floor, then enters a brightly lit room where a young woman in military attire stands waiting.",
+      "estimated_seconds": 8.186,
+      "measured_seconds": 0.0,
+      "trimmed": false
+    },
+    {
+      "start": 183.4,
+      "budget": 6.799,
+      "text": "The older man steps outside, looking toward a massive mechanical structure in the foggy square.",
+      "estimated_seconds": 6.07,
+      "measured_seconds": 0.0,
+      "trimmed": false
+    },
+    {
+      "start": 217.4,
+      "budget": 4.699,
+      "text": "A glowing dome expands around the man as the woman watches.",
+      "estimated_seconds": 3.927,
+      "measured_seconds": 0.0,
+      "trimmed": false
+    },
+    {
+      "start": 227.4,
+      "budget": 2.799,
+      "text": "A man in red points backward.",
+      "estimated_seconds": 2.022,
+      "measured_seconds": 0.0,
+      "trimmed": false
+    },
+    {
+      "start": 263.4,
+      "budget": 12.0,
+      "text": "A young man in a patterned shirt and jacket solidifies from digital static on a canal bridge and walks away.",
+      "estimated_seconds": 7.102,
+      "measured_seconds": 0.0,
+      "trimmed": false
+    },
+    {
+      "start": 305.4,
+      "budget": 9.79,
+      "text": "Thom works at a computer console while Celia stands outdoors near a city canal, then turns to look past him at the buildings across the water.",
+      "estimated_seconds": 8.821,
+      "measured_seconds": 0.0,
+      "trimmed": false
+    },
+    {
+      "start": 328.4,
+      "budget": 9.8,
+      "text": "The view shifts through a telescope lens, panning across distant rooftops before focusing on the mechanical beast crouching among tiles.",
+      "estimated_seconds": 8.186,
+      "measured_seconds": 0.0,
+      "trimmed": false
+    },
+    {
+      "start": 350.4,
+      "budget": 4.8,
+      "text": "The young man flexes his metallic fingers as purple text appears in the air.",
+      "estimated_seconds": 4.774,
+      "measured_seconds": 0.0,
+      "trimmed": false
+    },
+    {
+      "start": 368.9,
+      "budget": 1.8,
+      "text": "Thom kisses his.",
+      "estimated_seconds": 1.387,
+      "measured_seconds": 0.0,
+      "trimmed": true
+    },
+    {
+      "start": 397.4,
+      "budget": 8.8,
+      "text": "A man with a cybernetic eye watches Thom kiss the metallic hand.",
+      "estimated_seconds": 4.35,
+      "measured_seconds": 0.0,
+      "trimmed": false
+    },
+    {
+      "start": 411.4,
+      "budget": 6.8,
+      "text": "A woman watches the young man stand before the massive metal beast.",
+      "estimated_seconds": 4.139,
+      "measured_seconds": 0.0,
+      "trimmed": false
+    },
+    {
+      "start": 423.4,
+      "budget": 3.8,
+      "text": "Thom looks up as a spaceship descends.",
+      "estimated_seconds": 2.657,
+      "measured_seconds": 0.0,
+      "trimmed": false
+    },
+    {
+      "start": 431.76,
+      "budget": 12.0,
+      "text": "Thom tumbles backward onto a mattress, clutching his rifle, while a mechanical cylinder drops heavily into a circular console and vents smoke.",
+      "estimated_seconds": 9.694,
+      "measured_seconds": 0.0,
+      "trimmed": false
+    },
+    {
+      "start": 446.76,
+      "budget": 12.0,
+      "text": "Thom glances up from a complex white mechanical device, turning his head sharply toward the right.",
+      "estimated_seconds": 6.07,
+      "measured_seconds": 0.0,
+      "trimmed": false
+    },
+    {
+      "start": 461.76,
+      "budget": 12.0,
+      "text": "Four people in white hazmat suits kneel behind crates in a grand, sunlit hall as a bulky, grey-and-yellow mechanical beast steps into view.",
+      "estimated_seconds": 8.636,
+      "measured_seconds": 0.0,
+      "trimmed": false
+    },
+    {
+      "start": 476.76,
+      "budget": 12.0,
+      "text": "Thom fires his rifle alongside three others in hazmat suits, then stands with the weapon before running through a towering, cavernous industrial interior.",
+      "estimated_seconds": 9.482,
+      "measured_seconds": 0.0,
+      "trimmed": false
+    },
+    {
+      "start": 494.4,
+      "budget": 6.8,
+      "text": "Thom grabs a thick rope and swings up past a row of organ pipes.",
+      "estimated_seconds": 3.927,
+      "measured_seconds": 0.0,
+      "trimmed": false
+    },
+    {
+      "start": 508.59,
+      "budget": 8.61,
+      "text": "Thom stands on a bridge, facing a giant mechanical beast.",
+      "estimated_seconds": 3.741,
+      "measured_seconds": 0.0,
+      "trimmed": false
+    },
+    {
+      "start": 520.74,
+      "budget": 12.0,
+      "text": "The mechanical beast strikes the rusty pipe and sends a spray of sparks across the room, then a silver-haired man in a plaid shirt and jacket looks toward it.",
+      "estimated_seconds": 9.245,
+      "measured_seconds": 0.0,
+      "trimmed": false
+    },
+    {
+      "start": 539.72,
+      "budget": 12.0,
+      "text": "The silver-haired man places his hands gently on the mechanical beast as its glowing eye illuminates.",
+      "estimated_seconds": 6.679,
+      "measured_seconds": 0.0,
+      "trimmed": false
+    },
+    {
+      "start": 554.72,
+      "budget": 3.48,
+      "text": "The silver-haired man watches the man gesture.",
+      "estimated_seconds": 3.08,
+      "measured_seconds": 0.0,
+      "trimmed": false
+    },
+    {
+      "start": 567.4,
+      "budget": 2.53,
+      "text": "The woman walks out of the room.",
+      "estimated_seconds": 2.233,
+      "measured_seconds": 0.0,
+      "trimmed": false
+    },
+    {
+      "start": 616.36,
+      "budget": 12.0,
+      "text": "Blue wireframe graphics of a brain and a mechanical claw appear alongside scrolling animation credits.",
+      "estimated_seconds": 6.679,
+      "measured_seconds": 0.0,
+      "trimmed": false
+    },
+    {
+      "start": 631.36,
+      "budget": 12.0,
+      "text": "Orange and blue wireframe blueprints scroll upward against a dark background, framing lists of crew credits.",
+      "estimated_seconds": 6.07,
+      "measured_seconds": 0.0,
+      "trimmed": false
+    },
+    {
+      "start": 661.36,
+      "budget": 12.0,
+      "text": "Orange and blue wireframe blueprints continue scrolling upward, framing lists of crew credits.",
+      "estimated_seconds": 5.435,
+      "measured_seconds": 0.0,
+      "trimmed": false
+    },
+    {
+      "start": 691.36,
+      "budget": 12.0,
+      "text": "More orange and blue blueprints scroll upward, displaying institutional credits and a web address.",
+      "estimated_seconds": 5.858,
+      "measured_seconds": 0.0,
+      "trimmed": false
+    },
+    {
+      "start": 706.36,
+      "budget": 12.0,
+      "text": "A young man sits atop a massive pile of discarded robot parts and scrap metal.",
+      "estimated_seconds": 5.197,
+      "measured_seconds": 0.0,
+      "trimmed": false
+    },
+    {
+      "start": 721.36,
+      "budget": 12.0,
+      "text": "The young man takes a sip from a small flask before the screen cuts to black.",
+      "estimated_seconds": 4.35,
+      "measured_seconds": 0.0,
+      "trimmed": false
+    }
+  ]
+}

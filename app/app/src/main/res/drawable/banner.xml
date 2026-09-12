@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The home-screen banner. Drawn rather than drawn-on: a vector keeps the
+     APK small and stays sharp on a 4K television. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="320dp"
+    android:height="180dp"
+    android:viewportWidth="320"
+    android:viewportHeight="180">
+    <path
+        android:fillColor="#0E1116"
+        android:pathData="M0,0h320v180h-320z" />
+    <path
+        android:fillColor="#7CE1B0"
+        android:pathData="M40,90m-18,0a18,18 0 1,0 36,0a18,18 0 1,0 -36,0z" />
+    <path
+        android:fillColor="#7CE1B0"
+        android:fillAlpha="0.55"
+        android:pathData="M76,66h10v48h-10z M96,54h10v72h-10z M116,72h10v36h-10z M136,60h10v60h-10z M156,78h10v24h-10z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M186,80h100v6h-100z M186,96h72v6h-72z" />
+</vector>

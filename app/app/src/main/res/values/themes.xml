@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Fullscreen and black. A description track is for people who cannot
+         see the screen; everyone else is watching a film, and neither wants
+         a title bar. -->
+    <style name="Theme.SceneSpeak" parent="@android:style/Theme.Material.NoActionBar.Fullscreen">
+        <item name="android:windowBackground">@android:color/black</item>
+    </style>
+</resources>
