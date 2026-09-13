@@ -71,6 +71,12 @@ gets — a spoiler delivered by the accessibility feature itself. So
 `describe/names.py` learns the cast from the film's own dialogue and sends
 any line that names somebody too early back to be rewritten.
 
+**Tested by Amazon on real Fire TV hardware.** Amazon Appstore Automated
+Testing installed, launched and measured the app on four Fire TV sticks —
+Gen 2 (Fire OS 5), 4K (Fire OS 6), 3rd Gen (Fire OS 7) and 4K Max 2nd Gen
+(Fire OS 8). **Compatible on all four.** (The first build passed only two:
+it asked for a newer Android than it needed. Fixed in v1.1.)
+
 **Results on Tears of Steel (12:14).** 78.1% of the film is describable
 silence. 48 slots found, 35 lines written, 578 words, 11 slots where the
 writer said there was nothing worth describing.
@@ -131,7 +137,7 @@ It matters because audio description exists on a small fraction of titles
 and almost nothing outside English, and every piece here is open for someone
 to point at another film, another language, or another player.
 **Friction Log:** https://github.com/saifbrand/scenespeak/blob/main/FRICTION.md
-**Project Testing Link:** https://github.com/saifbrand/scenespeak/releases/tag/v1.0 (ready-to-install APK, film included)
+**Project Testing Link:** https://github.com/saifbrand/scenespeak/releases/tag/v1.1 (ready-to-install APK, film included)
 
 ## Feedback 1 — which tools, APIs and SDKs did you use and for what?
 
@@ -149,6 +155,10 @@ to point at another film, another language, or another player.
   the device.
 - **Python + numpy + ffmpeg** — the description pipeline: subtitle parsing,
   the speech-band audio analysis, frame sampling, and the timing model.
+- **Amazon Appstore Automated Testing** — installing, launching and
+  measuring the APK on real Fire TV sticks (Fire OS 5, 6, 7 and 8), since I
+  have no hardware. It found that my first build excluded the two older
+  sticks; the fixed build passed on all four.
 - **Gemini (vision)** — writing the description for each gap from sampled
   frames. Behind an interface with a second implementation, so the pipeline
   is not tied to one vendor.
@@ -160,6 +170,12 @@ standard Android SDK runs on Fire OS unchanged. No Fire-specific SDK, no
 device registration, no separate toolchain. For a developer on Windows with
 no hardware, that is a genuinely low barrier and it is the reason this
 project exists at all.
+
+Amazon Appstore Automated Testing was the best surprise: free, no published
+app needed, and within half an hour it had run my APK on four real Fire TV
+sticks from Fire OS 5 to 8 and told me two of them could not install it.
+Without it I would have shipped an app that silently excluded every Fire TV
+Stick 4K first generation.
 
 `androidx.tv:tv-material` sits alongside Compose without ceremony. D-pad
 input through `onKeyDown` worked first time. Media3's player API is clean and its
@@ -207,6 +223,12 @@ prevented it.
 matters — macOS/Linux only, and no sideloading on Vega devices — is not
 where the decision gets made. A one-line platform matrix on the "choose your
 path" page would save a Windows developer an hour.
+
+**Automated testing gives no reasons.** My 87.5 MB APK upload stopped at 42%
+with only "Upload failed" — no size limit shown, no error. And the summary
+marked two sticks non-compatible without saying why; the cause was my
+minimum Android version, which the upload step could have flagged in a
+second instead of after a 30-minute run.
 
 **Smaller:** `sdk.dir` in `local.properties` silently mangles a Windows path
 written with single backslashes and fails with `java.io.IOException: Invalid

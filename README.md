@@ -17,10 +17,14 @@ Everything here — where descriptions go, how long they are allowed to be,
 what happens when the voice runs long — follows from enforcing that rule and
 then measuring whether it held.
 
-**Try it without building anything:** download `SceneSpeak-1.0.apk` from
-[the v1.0 release](https://github.com/saifbrand/scenespeak/releases/tag/v1.0)
+**Try it without building anything:** download `SceneSpeak-1.1.apk` from
+[the v1.1 release](https://github.com/saifbrand/scenespeak/releases/tag/v1.1)
 and `adb install` it on a Fire TV or an Android TV emulator. The film is
 inside.
+
+**Passed Amazon Appstore Automated Testing on 4 of 4 Fire TV sticks**, Fire OS
+5 to 8: Fire TV Stick (Gen 2), Fire TV Stick 4K, Fire TV Stick (3rd Gen) and
+Fire TV Stick 4K Max (2nd Gen). See [MEASUREMENT.md](MEASUREMENT.md#4-on-amazons-own-fire-tv-devices).
 
 ## What it does
 
@@ -127,8 +131,10 @@ tools/install_demo.sh 192.168.1.42       # onto a Fire TV stick over the network
 ```
 
 Kotlin, Jetpack Compose for TV, Media3/ExoPlayer, Android TextToSpeech.
-`minSdk 22` covers Fire OS 5 and later; the demo runs on an Android TV
-emulator at API 30, which is Fire OS 8.
+`minSdk 22` covers Fire OS 5 and later. It was developed and measured on an
+Android TV emulator at API 30 (Fire OS 8), and Amazon's automated testing
+installed, launched and passed it on real Fire TV sticks running Fire OS 5,
+6, 7 and 8.
 
 The film goes inside the APK, so the installed app needs no sideloaded
 media, no permission dialog and no configuration. The film itself is not in

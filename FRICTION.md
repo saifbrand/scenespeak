@@ -23,6 +23,7 @@ hour · *Low* — minutes.
 | 6 | Recording the emulator with its sound | Medium | ~45 min |
 | 7 | `local.properties` on Windows | Low | ~20 min |
 | 8 | Leanback launcher and banner | Low | ~10 min |
+| 9 | Automated testing: upload limit and compatibility reasons | Medium | ~45 min + one test run |
 
 ---
 
@@ -162,7 +163,29 @@ hour · *Low* — minutes.
 
 ---
 
+## 9. Automated testing: upload limit and compatibility reasons
+
+**Task.** Run the app through Amazon Appstore Automated Testing on Fire TV.
+
+**Steps.**
+1. Uploaded the 87.5 MB APK (the film is inside it).
+2. Rebuilt a shrunk 22 MB APK and submitted it; read the summary.
+
+**Expected.** A stated size limit before uploading, and a reason next to any failed device.
+
+**Actual.**
+1. The upload stopped at **42%** with the words *Upload failed* and nothing else — no size limit, no error code. It is still not clear whether it was a limit or the connection.
+2. The summary marked two devices *Non-compatible* with no reason on that page. The cause turned out to be the app's minimum Android version (API 28), which excludes Fire OS 5 and 6 — a check the upload step could have made in a second, before a 30-minute run.
+
+**Workaround.** R8 shrinking plus a lighter film for the uploaded build; minSdk lowered to 22, after which all four devices passed.
+
+**Suggestion.** Show the maximum upload size on the page and an actual error when an upload fails. Read `minSdkVersion` at upload and warn which of the test devices cannot install the APK, before spending one of the week's eight runs on it.
+
+---
+
 ## What went well
+
+- **Amazon Appstore Automated Testing** is free, needs no published app, and ran the APK on four real Fire TV sticks from Fire OS 5 to 8 in half an hour. For a developer with no hardware, that is the difference between hoping and knowing.
 
 - An ordinary Kotlin + Compose + Media3 app, built with the standard Android SDK, runs on Fire OS unchanged — no Fire-specific SDK, no registration, no device. That low barrier is why this project exists.
 - `androidx.tv:tv-material` sits alongside Compose without ceremony; D-pad input through `onKeyDown` worked first time.

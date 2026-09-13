@@ -107,6 +107,27 @@ the end of the slot regardless of what any estimate said.
 
 Refitting the timing model to run 3 gives an average error of 0.38 s per line.
 
+## 4. On Amazon's own Fire TV devices
+
+Amazon Appstore Automated Testing (Developer Console → Tools & Services →
+Appstore Quality Central → Test Your App) installs an APK on real Fire TV
+hardware, launches it, exits it and measures it. It was run twice on
+13 September 2026, with the shrunk release build.
+
+| Device | Fire OS | v1.0 | v1.1 |
+|---|---|---|---|
+| Fire TV Stick (Gen 2) | 5 | non-compatible | **compatible** |
+| Fire TV Stick 4K | 6 | non-compatible | **compatible** |
+| Fire TV Stick (3rd Gen) | 7 | compatible | **compatible** |
+| Fire TV Stick 4K Max (2nd Gen) | 8 | compatible | **compatible** |
+| **Overall** | | 2 of 4 | **4 of 4** |
+
+v1.0 asked for Android 9 (Fire OS 7) without needing it, so the two older
+sticks could not install it. v1.1 lowers that to Android 5.1 (Fire OS 5),
+with fallbacks for the two newer APIs the app touches. Each run took about
+30 minutes. The tests cover install, launch, exit and performance; they do
+not check that descriptions avoid dialogue — that is sections 1–3.
+
 ## Reproducing it
 
 ```bash
@@ -123,9 +144,10 @@ closed.
 
 ## What this does not show
 
-- It was measured on an emulator, not a Fire TV stick. Fire OS 8 is Android
-  11, the engine is the same, and the film-time check does not depend on
-  device speed — but it has not been run on Amazon hardware.
+- The timing measurements in section 3 were made on an emulator. Amazon's
+  automated testing (section 4) confirms the app installs, launches and
+  runs on four real Fire TV sticks, but it does not repeat the film-time
+  measurement there.
 - Speech detection needs a music-and-effects stem. A film without one is
   planned from subtitles alone, which section 1 shows is weaker; the pipeline
   says so in its own output (`"sources": ["subtitles"]`).
