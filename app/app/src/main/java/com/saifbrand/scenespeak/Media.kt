@@ -51,8 +51,17 @@ object Media {
      * there is a film, a description track written for that film, and a
      * voice reading it -- no sideloaded media, no permission, no setup.
      */
-    fun find(context: Context): Found =
-        supplied(context) ?: Found(Uri.parse(BUILT_IN), "Tears of Steel", track(context))
+    fun find(context: Context): Found? =
+        supplied(context) ?: builtIn(context)
+
+    private fun builtIn(context: Context): Found? {
+        val present = try {
+            context.assets.openFd("film.mp4").use { true }
+        } catch (error: java.io.IOException) {
+            false
+        }
+        return if (present) Found(Uri.parse(BUILT_IN), "Tears of Steel", track(context)) else null
+    }
 
     /**
      * The first video in the scenespeak folder, or any video at all.

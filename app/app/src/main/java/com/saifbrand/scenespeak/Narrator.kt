@@ -251,9 +251,15 @@ class Narrator(
         }
 
         main.post {
-            speaking = null
-            onSpeaking(null)
-            onDuck(1f)
+            // Only the line that finished is cleared. By the time this runs
+            // the next line may already have started; clearing it would give
+            // the film its volume back mid-description and, worse, disarm
+            // that line's hard stop.
+            if (speaking?.startMs?.toString() == utteranceId) {
+                speaking = null
+                onSpeaking(null)
+                onDuck(1f)
+            }
         }
     }
 

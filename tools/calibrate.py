@@ -47,6 +47,10 @@ def read_measurements(path: str) -> dict[int, tuple[str, int]]:
     return spoken
 
 
+# Set from --language before features are computed, so a Bengali track is
+# counted in glyphs rather than English syllables.
+CALIBRATION = speech.Calibration()
+
 # Where the film was when each line stopped, in milliseconds of film time,
 # for recordings made by a player new enough to write it down.
 ENDED: dict[int, int] = {}
@@ -60,8 +64,7 @@ TICK_MS = 100
 def features(text: str) -> tuple[float, float, float]:
     """The three things the duration model is built from."""
     import re
-    words = speech.WORDS.findall(text)
-    beats = float(sum(speech.syllables(word) for word in words))
+    beats = float(speech.beats(text, CALIBRATION))
     pauses = float(len(re.findall(r"[,;:.](?:\s|$)", text)))
     return 1.0, beats, pauses
 
@@ -74,7 +77,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--device", default="Fire TV (Android 11) / com.google.android.tts",
                         help="what was measured, recorded in the file")
     parser.add_argument("--safety", type=float, default=1.08)
+    parser.add_argument("--language", default="en",
+                        help="language of the track that was played")
     args = parser.parse_args(argv)
+    global CALIBRATION
+    CALIBRATION = speech.Calibration(language=args.language)
 
     with open(args.track, encoding="utf-8") as handle:
         track = json.load(handle)
@@ -112,7 +119,7 @@ def main(argv: list[str] | None = None) -> int:
     fitted, *_ = np.linalg.lstsq(design, measured, rcond=None)
     overhead, per_syllable, per_pause = (float(value) for value in fitted)
 
-    before = np.array([speech.duration(line["text"])
+    before = np.array([speech.duration(line["text"], CALIBRATION)
                        for line in track["lines"]
                        if int(round(line["start"] * 1000)) in spoken
                        and spoken[int(round(line["start"] * 1000))][0] == "done"])
@@ -124,6 +131,7 @@ def main(argv: list[str] | None = None) -> int:
         per_pause=round(max(0.0, per_pause), 4),
         safety=args.safety,
         source=args.device,
+        language=args.language,
     )
     with open(args.out, "w", encoding="utf-8") as handle:
         json.dump(calibration.__dict__, handle, indent=2)

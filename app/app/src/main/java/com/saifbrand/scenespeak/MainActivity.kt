@@ -74,6 +74,10 @@ class MainActivity : ComponentActivity() {
         // instead. Opening with a permission dialog for a feature the app
         // does not need yet is how accessibility apps get uninstalled.
         val media = remember { Media.find(context) }
+        if (media == null) {
+            NoFilm()
+            return
+        }
 
         val track = remember { DescriptionTrack.parse(media.trackJson) }
         var saying by remember { mutableStateOf<Description?>(null) }
@@ -219,6 +223,26 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    /**
+     * Shown when the APK was built without its film.
+     *
+     * The film is not in the repository — it is 55 MB of somebody else's
+     * work — so an APK built straight from a fresh clone has only the track.
+     * A black screen would look like a crash; this says what happened.
+     */
+    @Composable
+    private fun NoFilm() {
+        Box(Modifier.fillMaxSize().background(Color.Black), Alignment.Center) {
+            Text(
+                text = "This build has no film.\n\nRun tools/fetch_media.sh, rebuild, and install " +
+                    "again — or copy a video into " + Media.PUBLIC_FOLDER +
+                    " and allow SceneSpeak to read it in Settings.",
+                color = Color.White,
+                fontSize = 28.sp,
+                modifier = Modifier.padding(96.dp),
+            )
+        }
+    }
 }
 
 private fun clock(positionMs: Long, durationMs: Long): String {

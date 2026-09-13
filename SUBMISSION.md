@@ -24,7 +24,7 @@ small fraction of titles, it costs real money to produce, and outside
 English it barely exists at all.
 
 SceneSpeak generates a description track from the film itself, and speaks it
-on a Fire TV stick.
+on Fire TV.
 
 It is built around one rule, chosen because it can be proved rather than
 claimed: **a description may never be spoken over dialogue.** Everything
@@ -161,10 +161,9 @@ no hardware, that is a genuinely low barrier and it is the reason this
 project exists at all.
 
 `androidx.tv:tv-material` sits alongside Compose without ceremony. D-pad
-input through `onKeyDown` worked first time. `adb connect <ip>:5555` to a
-real stick is the same flow as the emulator, so everything built against the
-emulator transfers. Media3's player API is clean and its position reporting
-is accurate enough to drive speech timing at four ticks a second.
+input through `onKeyDown` worked first time. Media3's player API is clean and its
+position reporting is accurate enough to drive speech timing at ten ticks a
+second.
 
 ## Feedback 3 — what needs work?
 

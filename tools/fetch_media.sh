@@ -27,4 +27,9 @@ if [ ! -f media/film.mp4 ]; then
     -c:a aac -b:a 128k -movflags +faststart media/film.mp4
 fi
 
-ls -lh media/
+# The Fire TV app carries the film inside the APK so it plays with no setup.
+# The asset is not committed, so it is copied in here.
+mkdir -p app/app/src/main/assets
+cp media/film.mp4 app/app/src/main/assets/film.mp4
+
+ls -lh media/ app/app/src/main/assets/

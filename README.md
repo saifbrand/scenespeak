@@ -7,8 +7,8 @@ is audio description: a voice that says what is on screen, in the gaps where
 nobody is speaking. It exists on a small fraction of titles, it is expensive
 to produce, and in most languages it barely exists at all.
 
-SceneSpeak generates one from the film itself and speaks it on a Fire TV
-stick. The whole project is built around a single rule that can be checked
+SceneSpeak generates one from the film itself and speaks it on Fire TV.
+The whole project is built around a single rule that can be checked
 rather than claimed:
 
 > **A description may never be spoken over dialogue.**
@@ -89,12 +89,25 @@ sentence returns a sentence. Cutting words off the end of a long one returns
 
 ## Running it
 
+You need Python 3.10+ with `pip install -r requirements.txt`, and `ffmpeg`
+on the PATH. For the app: JDK 17+ and the Android SDK, with `ANDROID_HOME`
+set (Android Studio installs both).
+
 ```bash
 tools/fetch_media.sh                     # the film, subtitles and stems (CC-BY)
 python -m describe.cli --writer stub     # the whole pipeline, no key, no network
 SCENESPEAK_GEMINI_KEY=... python -m describe.cli --writer gemini
 python -m pytest tests/ -q               # 90 tests (plus 11 Kotlin tests in app/)
 ```
+
+**Other languages.** `--language bn` (any BCP 47 tag) asks the writer for
+that language, records it in the track, and the app picks its voice from
+it. English is timed by syllable; other scripts are timed by written glyph
+with vowel signs excluded, and need their own constants measured on the
+device (`tools/calibrate.py --language bn`). Two honest limits: the spoiler
+check relies on capital letters, so it cannot see names in scripts without
+case, and whether a given Fire TV has a voice for the language is checked
+by the app at startup, not assumed.
 
 The vision writer is an interface with more than one implementation
 (`describe/vision.py`), so the pipeline is not tied to one vendor's
@@ -112,8 +125,11 @@ Kotlin, Jetpack Compose for TV, Media3/ExoPlayer, Android TextToSpeech.
 `minSdk 28` covers Fire OS 7 and later; the demo runs on an Android TV
 emulator at API 30, which is Fire OS 8.
 
-The film is inside the APK, so there is nothing to sideload, no permission
-dialog on launch, and nothing to configure — install it and it plays.
+The film goes inside the APK, so the installed app needs no sideloaded
+media, no permission dialog and no configuration. The film itself is not in
+this repository; `tools/install_demo.sh` fetches it on first run
+(`tools/fetch_media.sh`, about 600 MB with the audio stems). A build made
+without it opens on a screen that says so rather than a black one.
 
 On the remote: **centre** toggles description, **play/pause** pauses both the
 film and the voice, **left/right** skip thirty seconds.

@@ -3,7 +3,8 @@
 calibration.local.json
 
 # Big media. Fetched by tools/fetch_media.sh, never stored in the repo.
-media/
+# (media/* not media/: a directory pattern cannot be undone by a negation.)
+media/*
 *.mov
 *.webm
 *.aif
