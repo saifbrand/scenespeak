@@ -20,7 +20,14 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            // Shrunk with R8 and carrying a lighter copy of the film
+            // (src/release/assets), so the APK fits upload limits such as
+            // Amazon's automated testing. Signed with the debug key: it is
+            // for sideloading and testing, not for a store listing.
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
     compileOptions {

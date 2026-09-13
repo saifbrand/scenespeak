@@ -32,4 +32,11 @@ fi
 mkdir -p app/app/src/main/assets
 cp media/film.mp4 app/app/src/main/assets/film.mp4
 
+# A much lighter copy for the release build (about 20 MB), which keeps the
+# shrunk APK small enough for upload limits such as Amazon's automated testing.
+mkdir -p app/app/src/release/assets
+if [ ! -f app/app/src/release/assets/film.mp4 ]; then
+  ffmpeg -v error -y -i media/tears_of_steel_720p.mov -vf "scale=640:-2"     -c:v libx264 -profile:v main -preset slow -b:v 150k -maxrate 230k -bufsize 460k     -c:a aac -b:a 64k -movflags +faststart app/app/src/release/assets/film.mp4
+fi
+
 ls -lh media/ app/app/src/main/assets/
