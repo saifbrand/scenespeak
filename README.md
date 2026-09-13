@@ -127,7 +127,7 @@ tools/install_demo.sh 192.168.1.42       # onto a Fire TV stick over the network
 ```
 
 Kotlin, Jetpack Compose for TV, Media3/ExoPlayer, Android TextToSpeech.
-`minSdk 28` covers Fire OS 7 and later; the demo runs on an Android TV
+`minSdk 22` covers Fire OS 5 and later; the demo runs on an Android TV
 emulator at API 30, which is Fire OS 8.
 
 The film goes inside the APK, so the installed app needs no sideloaded

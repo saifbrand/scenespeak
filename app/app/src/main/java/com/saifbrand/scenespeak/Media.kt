@@ -73,10 +73,15 @@ object Media {
     fun supplied(context: Context): Found? {
         if (!granted(context)) return null
 
+        // Where the file lives is RELATIVE_PATH from Android 10 and the
+        // absolute DATA path before it -- the older Fire OS sticks only have
+        // the second.
+        val pathKey = if (Build.VERSION.SDK_INT >= 29) MediaStore.Video.Media.RELATIVE_PATH
+        else @Suppress("DEPRECATION") MediaStore.Video.Media.DATA
         val columns = arrayOf(
             MediaStore.Video.Media._ID,
             MediaStore.Video.Media.DISPLAY_NAME,
-            MediaStore.Video.Media.RELATIVE_PATH,
+            pathKey,
         )
         val collection = MediaStore.Video.Media.EXTERNAL_CONTENT_URI
 
@@ -93,7 +98,7 @@ object Media {
         found?.use { cursor ->
             val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Video.Media._ID)
             val nameColumn = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DISPLAY_NAME)
-            val pathColumn = cursor.getColumnIndex(MediaStore.Video.Media.RELATIVE_PATH)
+            val pathColumn = cursor.getColumnIndex(pathKey)
             while (cursor.moveToNext()) {
                 val uri = ContentUris.withAppendedId(collection, cursor.getLong(idColumn))
                 val name = cursor.getString(nameColumn) ?: continue

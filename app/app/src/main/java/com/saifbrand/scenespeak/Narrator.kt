@@ -102,7 +102,14 @@ class Narrator(
                         // Telling the platform this is accessibility speech
                         // is what lets it survive a viewer muting the film,
                         // and what marks it as speech to anything listening.
-                        .setUsage(AudioAttributes.USAGE_ASSISTANCE_ACCESSIBILITY)
+                        // The accessibility usage exists from Android 8; the
+                        // Fire OS 5 and 6 sticks are older, and there the
+                        // voice is ordinary media audio instead.
+                        .setUsage(
+                            if (android.os.Build.VERSION.SDK_INT >= 26)
+                                AudioAttributes.USAGE_ASSISTANCE_ACCESSIBILITY
+                            else AudioAttributes.USAGE_MEDIA
+                        )
                         .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
                         .build()
                 )

@@ -10,12 +10,14 @@ android {
 
     defaultConfig {
         applicationId = "com.saifbrand.scenespeak"
-        // Fire OS 7 is Android 9 (API 28); Fire OS 8 is Android 11 (API 30).
-        // Reaching back to 28 covers every Fire TV stick still being sold.
-        minSdk = 28
+        // Fire OS 5 is Android 5.1 (API 22), Fire OS 6 is 7.1 (25), Fire OS 7
+        // is 9 (28), Fire OS 8 is 11 (30). This was 28 until Amazon's automated
+        // testing reported the Fire TV Stick Gen 2 and Fire TV Stick 4K as
+        // non-compatible; nothing in the app needs more than 22.
+        minSdk = 22
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.1"
     }
 
     buildTypes {
