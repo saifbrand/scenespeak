@@ -228,8 +228,8 @@ The Android TV emulator is the weak point of onboarding, and not because of
 Amazon: there is no Fire TV image, so you build an Android TV AVD and take
 it on faith that Fire OS behaves the same. It mostly does, but you cannot
 check the differences you were warned about, which is an uncomfortable place
-to develop from. Finding out later that Amazon hosts real Fire TV devices
-for remote testing was a relief — that deserves to be much louder in the
+to develop from. I found out late that Amazon hosts real Fire TV devices for remote
+testing (Live Device Interaction) — that deserves to be much louder in the
 Fire TV getting-started path than it is.
 
 ## Feedback 5 — would you build with these again?
