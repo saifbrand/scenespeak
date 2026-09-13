@@ -17,6 +17,11 @@ Everything here — where descriptions go, how long they are allowed to be,
 what happens when the voice runs long — follows from enforcing that rule and
 then measuring whether it held.
 
+**Try it without building anything:** download `SceneSpeak-1.0.apk` from
+[the v1.0 release](https://github.com/saifbrand/scenespeak/releases/tag/v1.0)
+and `adb install` it on a Fire TV or an Android TV emulator. The film is
+inside.
+
 ## What it does
 
 ```

@@ -131,6 +131,7 @@ It matters because audio description exists on a small fraction of titles
 and almost nothing outside English, and every piece here is open for someone
 to point at another film, another language, or another player.
 **Friction Log:** https://github.com/saifbrand/scenespeak/blob/main/FRICTION.md
+**Project Testing Link:** https://github.com/saifbrand/scenespeak/releases/tag/v1.0 (ready-to-install APK, film included)
 
 ## Feedback 1 — which tools, APIs and SDKs did you use and for what?
 
