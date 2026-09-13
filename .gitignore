@@ -36,3 +36,6 @@ app/.gradle/
 app/build/
 app/app/build/
 .gradle/
+
+# Rendered demo video and stills, uploaded elsewhere.
+submission/
