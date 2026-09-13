@@ -53,6 +53,17 @@ class Narrator(
     private var startedAtPosition = 0L
 
     /**
+     * Where the film was on the last tick, readable from the binder thread.
+     *
+     * The rule is about the film's clock, not the room's. On a loaded
+     * emulator the two drift apart -- a line can take 8.4 seconds of wall
+     * time while the film advances only 6 -- so "how long did it speak"
+     * cannot decide whether it overlapped anything. "Where was the film when
+     * it stopped" can. At most one tick stale, which is 100 ms.
+     */
+    @Volatile private var lastPositionMs = 0L
+
+    /**
      * The voice's language, taken from the track.
      *
      * A Bengali track read by an English voice is not a degraded experience,
@@ -135,6 +146,7 @@ class Narrator(
      * is, never by how much time has passed in the room.
      */
     fun update(track: DescriptionTrack, positionMs: Long, playing: Boolean) {
+        lastPositionMs = positionMs
         if (!ready) return
 
         if (!playing) {
@@ -221,7 +233,8 @@ class Narrator(
         log.append(utteranceId ?: "?").append('\t')
             .append(how).append('\t')
             .append(spokenMs).append('\t')
-            .append(startedAtPosition).append('\n')
+            .append(startedAtPosition).append('\t')
+            .append(lastPositionMs).append('\n')
         if (how != "done") {
             Log.w(TAG, "Description at $utteranceId ended as $how after ${spokenMs}ms")
         }
@@ -275,6 +288,6 @@ class Narrator(
 
     private companion object {
         const val TAG = "SceneSpeak"
-        const val HEADER = "utterance\toutcome\tspoken_ms\tposition_ms\n"
+        const val HEADER = "utterance\toutcome\tspoken_ms\tposition_ms\tended_at_ms\n"
     }
 }

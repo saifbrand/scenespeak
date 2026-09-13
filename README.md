@@ -43,11 +43,11 @@ Every figure below is computed by `python -m describe.cli`, not estimated.
 | Dialogue | 161 s (**21.9%**) |
 | Describable silence | 573 s (**78.1%**) |
 | Description slots found | 48 |
-| Lines written | 36 |
+| Lines written | 35 |
 | Lines the writer declined to write (nothing worth describing) | 11 |
-| Words spoken | 594 |
+| Words spoken | 578 |
 | **Collisions with measured speech** | **0** |
-| Tightest margin between a line ending and speech resuming | 0.03 s |
+| Tightest estimated margin inside a slot | 0.48 s |
 
 ## The part that is not obvious
 
@@ -93,7 +93,7 @@ sentence returns a sentence. Cutting words off the end of a long one returns
 tools/fetch_media.sh                     # the film, subtitles and stems (CC-BY)
 python -m describe.cli --writer stub     # the whole pipeline, no key, no network
 SCENESPEAK_GEMINI_KEY=... python -m describe.cli --writer gemini
-python -m pytest tests/ -q               # 81 tests
+python -m pytest tests/ -q               # 90 tests (plus 11 Kotlin tests in app/)
 ```
 
 The vision writer is an interface with more than one implementation
@@ -130,8 +130,11 @@ python tools/calibrate.py spoken.tsv out/tears_of_steel.json
 ```
 
 That fits the timing constants to the device's own voice and reports the
-only number that matters: how many lines took longer than the silence they
-were given. See [MEASUREMENT.md](MEASUREMENT.md) for the run.
+only number that matters: how many lines were still speaking, in film time,
+when their silence ended. On the last full playback: **35 of 35 lines spoken,
+0 overran, 0 overlapped real speech, nearest approach to a spoken word 1.38
+s.** [MEASUREMENT.md](MEASUREMENT.md) has all three runs, including the one
+that exposed a measurement error and a player bug.
 
 ## Licence and credits
 

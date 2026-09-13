@@ -72,15 +72,22 @@ gets — a spoiler delivered by the accessibility feature itself. So
 any line that names somebody too early back to be rewritten.
 
 **Results on Tears of Steel (12:14).** 78.1% of the film is describable
-silence. 48 slots found, 36 lines written, 594 words spoken, 11 slots where
-the writer said there was nothing worth describing. **Zero collisions** with
-speech detected independently from the audio. Tightest margin between a line
-ending and speech resuming: 0.03 s.
+silence. 48 slots found, 35 lines written, 578 words, 11 slots where the
+writer said there was nothing worth describing.
 
-And it is checked on the device, not just on paper: the app writes down how
-long every line actually took to speak, and `tools/calibrate.py` reads that
-back, fits the timing model to the device's own voice, and reports how many
-lines overran their silence.
+**Checked on the device, in film time.** The app records where the film was
+when every line started and stopped. Playing the whole film on Fire OS 8:
+all 35 lines spoken, **0 still speaking when their slot closed**, **0
+overlapping speech detected in the audio**, and the closest any description
+came to the next spoken word was **1.38 seconds**.
+
+Getting there took three full playbacks, and the one that went wrong is the
+most useful part of MEASUREMENT.md. The second run seemed to show a line
+taking 8.4 s in a 6.8 s gap and three lines never spoken. The first was a
+measurement error — wall-clock time on an emulator drifts from film time, so
+the app now logs film position instead. The second was real: lines start up
+to a quarter second late, and the player refuses to start a line that no
+longer fits, so the pipeline now leaves room for that.
 
 ## Built with
 

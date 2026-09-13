@@ -30,6 +30,18 @@ class Sources:
     plan is made from subtitles alone, which is weaker and says so."""
 
 
+START_LATENCY = 0.3
+"""Seconds a line may begin after its slot opens, on the player.
+
+Measured, not assumed: on Fire OS 8 the player started lines up to 0.25 s
+into their slot -- one polling tick plus the engine picking the request up.
+The player refuses to start a line that no longer fits what is left of its
+slot, so a line sized to the whole slot is not cut off, it is silently never
+spoken. Three lines of Tears of Steel were lost that way before this
+existed. Every line is therefore sized to the slot minus this allowance.
+"""
+
+
 class Cache:
     """Remembers what the model already wrote for a slot.
 
@@ -101,6 +113,7 @@ def run(sources: Sources, writer, out_dir: str = "out",
     spoilers = 0
     for slot in slots:
         shots: list[str] = []
+        room = max(0.0, slot.budget - START_LATENCY)
 
         def ask(attempt: int, too_long: str = "",
                 forbidden: list[str] | None = None) -> str:
@@ -139,10 +152,10 @@ def run(sources: Sources, writer, out_dir: str = "out",
         # A line that does not fit is sent back to be rewritten before it is
         # cut. A writer asked for a shorter sentence returns a sentence; a
         # sentence chopped at the tail returns a fragment.
-        if not speech.fits(text, slot.budget, calibration):
+        if not speech.fits(text, room, calibration):
             shorter = ask(1, too_long=text)
             if shorter and not shorter.strip().upper().startswith("SKIP"):
-                if speech.fits(shorter, slot.budget, calibration):
+                if speech.fits(shorter, room, calibration):
                     rewritten += 1
                     text = shorter
                 elif speech.duration(shorter, calibration) < speech.duration(
@@ -164,7 +177,7 @@ def run(sources: Sources, writer, out_dir: str = "out",
                 spoilers += 1
                 continue
 
-        fitted = speech.trim(text, slot.budget, calibration)
+        fitted = speech.trim(text, room, calibration)
         if not fitted:
             # Nothing survived that was still worth hearing. Silence is a
             # better answer than a fragment.

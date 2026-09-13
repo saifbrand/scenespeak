@@ -30,6 +30,7 @@ from describe import speech  # noqa: E402
 def read_measurements(path: str) -> dict[int, tuple[str, int]]:
     """Map each line's start time in milliseconds to what it did."""
     spoken: dict[int, tuple[str, int]] = {}
+    ENDED.clear()
     with open(path, encoding="utf-8") as handle:
         for number, row in enumerate(handle):
             parts = row.rstrip("\n").split("\t")
@@ -39,9 +40,21 @@ def read_measurements(path: str) -> dict[int, tuple[str, int]]:
                 continue
             try:
                 spoken[int(parts[0])] = (parts[1], int(parts[2]))
+                if len(parts) >= 5:
+                    ENDED[int(parts[0])] = int(parts[4])
             except ValueError:
                 continue
     return spoken
+
+
+# Where the film was when each line stopped, in milliseconds of film time,
+# for recordings made by a player new enough to write it down.
+ENDED: dict[int, int] = {}
+
+# The player reads the film's position every 100 ms, so a recorded end
+# position can be up to one tick behind the truth. It is added before
+# judging, never subtracted.
+TICK_MS = 100
 
 
 def features(text: str) -> tuple[float, float, float]:
@@ -80,7 +93,14 @@ def main(argv: list[str] | None = None) -> int:
             continue
         rows.append(features(line["text"]))
         seconds.append(measured_ms / 1000)
-        if measured_ms / 1000 > line["budget"]:
+        if key in ENDED:
+            # The real test of the rule: was the film still inside this
+            # line's slot when the voice stopped? Film time, not wall time --
+            # on a loaded device the two drift apart by seconds.
+            slot_end = key + int(round(line["budget"] * 1000))
+            if ENDED[key] + TICK_MS > slot_end:
+                overruns.append((line, (ENDED[key] + TICK_MS - key) / 1000))
+        elif measured_ms / 1000 > line["budget"]:
             overruns.append((line, measured_ms / 1000))
 
     if len(rows) < 5:
@@ -122,7 +142,14 @@ def main(argv: list[str] | None = None) -> int:
         for line, outcome in unfinished[:5]:
             print(f"  {line['start']:8.2f}s {outcome}: {line['text'][:60]}")
 
-    print(f"\nlines that overran their silence: {len(overruns)}")
+    unspoken = [line for line in track["lines"]
+                if int(round(line["start"] * 1000)) not in spoken]
+    print(f"\nlines the player never started: {len(unspoken)}")
+    for line in unspoken[:10]:
+        print(f"  {line['start']:8.2f}s budget {line['budget']:.2f}s: {line['text'][:60]}")
+
+    judged = "film time" if ENDED else "wall-clock time (recording predates end positions)"
+    print(f"\nlines that overran their silence, judged in {judged}: {len(overruns)}")
     for line, took in overruns[:10]:
         print(f"  {line['start']:8.2f}s took {took:.2f}s of {line['budget']:.2f}s: "
               f"{line['text'][:60]}")

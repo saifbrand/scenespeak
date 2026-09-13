@@ -189,3 +189,9 @@ def test_english_answers_already_paid_for_keep_their_cache_key(film, tmp_path):
     build(film, tmp_path)
     with open(tmp_path / "work" / "written.json", encoding="utf-8") as handle:
         assert all("/" not in key.split("|")[0] for key in json.load(handle))
+
+
+def test_every_line_leaves_room_for_the_player_to_start_late(film, tmp_path):
+    from describe.build import START_LATENCY
+    for line in build(film, tmp_path).lines:
+        assert line.estimated_seconds <= line.budget - START_LATENCY

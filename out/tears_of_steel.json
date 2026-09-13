@@ -1,6 +1,7 @@
 {
   "film": "Tears of Steel",
   "duration": 734.167,
+  "language": "en",
   "generator": {
     "writer": "gemini:gemini-flash-lite-latest",
     "frames_per_slot": 3,
@@ -16,7 +17,8 @@
       "per_syllable": 0.188,
       "per_pause": 0.112,
       "safety": 1.08,
-      "source": "Fire TV (Android 11) / com.google.android.tts"
+      "source": "Fire TV (Android 11) / com.google.android.tts",
+      "language": "en"
     },
     "sources": [
       "subtitles",
@@ -34,17 +36,17 @@
       "subtitles",
       "audio"
     ],
-    "lines_written": 36,
+    "lines_written": 35,
     "lines_skipped_by_writer": 11,
-    "lines_dropped_as_too_long": 1,
+    "lines_dropped_as_too_long": 2,
     "lines_rewritten_shorter": 8,
     "lines_rewritten_without_a_premature_name": 1,
     "lines_dropped_as_spoilers": 0,
     "lines_trimmed_to_fit": 1,
-    "words_spoken": 587,
-    "speaking_seconds": 221.14,
-    "share_of_silence_used": 0.3858,
-    "smallest_headroom_seconds": 0.004,
+    "words_spoken": 578,
+    "speaking_seconds": 218.0,
+    "share_of_silence_used": 0.3803,
+    "smallest_headroom_seconds": 0.476,
     "audio_speech_seconds": 95.79,
     "audio_stem_separation_db": 10.84,
     "collisions_with_measured_speech": 0,
@@ -180,14 +182,6 @@
       "trimmed": false
     },
     {
-      "start": 368.9,
-      "budget": 1.8,
-      "text": "Thom kisses his.",
-      "estimated_seconds": 1.714,
-      "measured_seconds": 0.0,
-      "trimmed": true
-    },
-    {
       "start": 397.4,
       "budget": 8.8,
       "text": "A man with a cybernetic eye watches Thom kiss the metallic hand.",
@@ -278,16 +272,16 @@
     {
       "start": 554.72,
       "budget": 3.48,
-      "text": "The silver-haired man watches the man gesture.",
-      "estimated_seconds": 3.338,
+      "text": "The silver-haired man watches the man.",
+      "estimated_seconds": 2.932,
       "measured_seconds": 0.0,
-      "trimmed": false
+      "trimmed": true
     },
     {
       "start": 567.4,
       "budget": 2.53,
-      "text": "The woman walks out of the room.",
-      "estimated_seconds": 2.526,
+      "text": "She exits.",
+      "estimated_seconds": 1.511,
       "measured_seconds": 0.0,
       "trimmed": false
     },
