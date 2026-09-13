@@ -26,6 +26,8 @@ class DescriptionTrack(
     val film: String,
     val durationMs: Long,
     val lines: List<Description>,
+    /** BCP 47 tag the lines are written in; the narrator picks its voice from it. */
+    val language: String = "en",
 ) {
     /**
      * The line that should be speaking at [positionMs], if any.
@@ -81,6 +83,7 @@ class DescriptionTrack(
                 film = root.optString("film", "Unknown film"),
                 durationMs = (root.optDouble("duration", 0.0) * 1000).toLong(),
                 lines = lines,
+                language = root.optString("language", "en").ifBlank { "en" },
             )
         }
     }

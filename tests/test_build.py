@@ -157,3 +157,35 @@ def test_a_cache_key_changes_when_the_slot_does():
     assert Cache.key("w", 1.0, 2.0) != Cache.key("w", 1.0, 3.0)
     assert Cache.key("w", 1.0, 2.0) != Cache.key("other", 1.0, 2.0)
     assert Cache.key("w", 1.0, 2.0) != Cache.key("w", 1.0, 2.0, attempt=1)
+
+
+def test_a_track_records_its_language_and_asks_the_writer_for_it(film, tmp_path):
+    asked = []
+
+    class Recording(vision.StubWriter):
+        def write(self, request):
+            asked.append(request.language)
+            return super().write(request)
+
+    made = run(film, Recording(), out_dir=str(tmp_path / "out"),
+               work=str(tmp_path / "work"), frames_per_slot=1,
+               calibration=speech.Calibration(language="bn"))
+    assert made.language == "bn"
+    assert asked and set(asked) == {"bn"}
+    path = tmp_path / "bn.json"
+    made.save(str(path))
+    assert track.Track.load(str(path)).language == "bn"
+
+
+def test_the_prompt_names_the_language_only_when_it_is_not_english():
+    english = vision.Request(0, 4.0, []).prompt(speech.Calibration())
+    bengali = vision.Request(0, 4.0, [], language="bn").prompt(
+        speech.Calibration(language="bn"))
+    assert "Bengali" not in english
+    assert "Bengali" in bengali
+
+
+def test_english_answers_already_paid_for_keep_their_cache_key(film, tmp_path):
+    build(film, tmp_path)
+    with open(tmp_path / "work" / "written.json", encoding="utf-8") as handle:
+        assert all("/" not in key.split("|")[0] for key in json.load(handle))

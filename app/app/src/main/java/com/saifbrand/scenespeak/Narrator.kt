@@ -52,6 +52,26 @@ class Narrator(
     private var startedAtWall = 0L
     private var startedAtPosition = 0L
 
+    /**
+     * The voice's language, taken from the track.
+     *
+     * A Bengali track read by an English voice is not a degraded experience,
+     * it is gibberish, so a language the engine has no voice for is logged
+     * loudly rather than quietly spoken in the wrong one.
+     */
+    var language: String = "en"
+        set(value) {
+            field = value
+            if (ready) applyLanguage()
+        }
+
+    private fun applyLanguage() {
+        val result = engine?.setLanguage(Locale.forLanguageTag(language))
+        if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+            Log.e(TAG, "This device has no voice for '$language' (result $result)")
+        }
+    }
+
     var enabled: Boolean = true
         set(value) {
             field = value
@@ -64,8 +84,8 @@ class Narrator(
                 Log.w(TAG, "No text-to-speech engine is available on this device")
                 return@TextToSpeech
             }
+            applyLanguage()
             engine?.apply {
-                language = Locale.US
                 setAudioAttributes(
                     AudioAttributes.Builder()
                         // Telling the platform this is accessibility speech

@@ -19,9 +19,33 @@ import os
 import re
 from dataclasses import asdict, dataclass
 
+# Languages whose syllables the counter below can honestly claim to count.
+# Everything else is timed by glyph, which is cruder and honest about it.
+LATIN_ENOUGH = frozenset({"en"})
+
 VOWELS = re.compile(r"[aeiouy]+")
 WORDS = re.compile(r"[A-Za-z']+")
-CLAUSE = re.compile(r"(?<=[,;:.])\s+")
+CLAUSE = re.compile(r"(?<=[,;:.।])\s+")   # । is the Indic full stop
+
+# Anything that is spoken, in any script: letters, no spaces, digits or
+# punctuation. Used to time a language whose syllables this module has no
+# business claiming to count.
+GLYPHS = re.compile(r"[^\W\d_]", re.UNICODE)
+
+# Marks that hang off a letter rather than being one: Bengali vowel signs,
+# Arabic harakat, Thai tone marks, Latin accents. They change how a letter
+# sounds without adding a beat to it, so they are not counted.
+COMBINING = re.compile(
+    "["
+    "̀-ͯ"    # Latin and Greek accents
+    "҃-҉"    # Cyrillic
+    "֑-ֽ"    # Hebrew points
+    "ً-ٟ"    # Arabic harakat
+    "ঁ-ঃ়া-্ৗ"   # Bengali signs and virama
+    "ँ-ः़ा-्॑-ॗ"   # Devanagari
+    "ัิ-ฺ็-๎"         # Thai
+    "]"
+)
 
 # Words a phrase hangs from. Cutting a sentence at one of these, and
 # removing it, leaves the head of the sentence intact and readable.
@@ -65,6 +89,29 @@ class Calibration:
     """Where these numbers came from — "default", or the device and voice
     they were measured on, so a published figure can be traced."""
 
+    language: str = "en"
+    """The language these constants were measured for.
+
+    Speech rate is not a property of the synthesiser alone. The same engine
+    reading Bengali and English covers different amounts of meaning per
+    second, and the unit being counted is not even the same thing, so a
+    track in a new language needs its own measured constants — obtained the
+    same way as the English ones, by being spoken on the device and timed.
+    """
+
+    @property
+    def counts_syllables(self) -> bool:
+        """Whether the syllable counter applies to this language at all.
+
+        It is an English heuristic — vowel groups, silent final e — and
+        pretending it generalises would be worse than admitting it does
+        not. For everything else the unit is a written glyph, which is
+        cruder but is a real proportional measure of how much there is to
+        say, and the constant in front of it is measured rather than
+        assumed.
+        """
+        return self.language.split("-")[0].lower() in LATIN_ENOUGH
+
     @classmethod
     def load(cls, path: str = "") -> "Calibration":
         path = path or os.environ.get("SCENESPEAK_CALIBRATION", "calibration.json")
@@ -91,15 +138,27 @@ def syllables(word: str) -> int:
     return max(1, count)
 
 
+def beats(text: str, calibration: Calibration = Calibration()) -> int:
+    """How many units of speech this line contains.
+
+    Syllables where they can honestly be counted, written glyphs where they
+    cannot. Either way the unit only has to be *proportional* to the time
+    the line takes: what converts units into seconds is a constant measured
+    on the device, per language.
+    """
+    if calibration.counts_syllables:
+        return sum(syllables(word) for word in WORDS.findall(text))
+    return len(GLYPHS.findall(COMBINING.sub("", text)))
+
+
 def duration(text: str, calibration: Calibration = Calibration()) -> float:
     """Seconds this line will take to speak."""
-    words = WORDS.findall(text)
-    if not words:
+    units = beats(text, calibration)
+    if not units:
         return 0.0
-    beats = sum(syllables(word) for word in words)
-    pauses = len(re.findall(r"[,;:.](?:\s|$)", text))
+    pauses = len(re.findall(r"[,;:.।](?:\s|$)", text))
     spoken = (calibration.overhead
-              + beats * calibration.per_syllable
+              + units * calibration.per_syllable
               + pauses * calibration.per_pause)
     return round(spoken * calibration.safety, 3)
 
@@ -113,8 +172,12 @@ def words_for(budget: float, calibration: Calibration = Calibration()) -> int:
     answer is still measured afterwards.
     """
     usable = budget / calibration.safety - calibration.overhead
-    beats = max(0.0, usable) / calibration.per_syllable
-    return max(1, int(beats / 1.55))  # ~1.55 syllables per word in plain prose
+    units = max(0.0, usable) / calibration.per_syllable
+    # About 1.55 syllables per English word in plain prose; about 4.4
+    # glyphs per word in a Bengali sentence. Both are rules of thumb used
+    # only to phrase the request, never to decide whether a line fits.
+    per_word = 1.55 if calibration.counts_syllables else 4.4
+    return max(1, int(units / per_word))
 
 
 def fits(text: str, budget: float, calibration: Calibration = Calibration()) -> bool:

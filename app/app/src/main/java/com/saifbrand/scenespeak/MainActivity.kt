@@ -45,6 +45,15 @@ class MainActivity : ComponentActivity() {
     private var player: ExoPlayer? = null
     private var narrator: Narrator? = null
 
+    /**
+     * Whether descriptions are being spoken.
+     *
+     * It lives on the activity rather than inside the composable because
+     * the remote arrives at `onKeyDown`, outside composition. Being Compose
+     * state, writing it from there still redraws the screen.
+     */
+    private var describing by mutableStateOf(true)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent { SceneSpeakScreen() }
@@ -67,7 +76,6 @@ class MainActivity : ComponentActivity() {
         val media = remember { Media.find(context) }
 
         val track = remember { DescriptionTrack.parse(media.trackJson) }
-        var describing by remember { mutableStateOf(true) }
         var saying by remember { mutableStateOf<Description?>(null) }
         var position by remember { mutableStateOf(0L) }
 
@@ -90,19 +98,22 @@ class MainActivity : ComponentActivity() {
                 // production image, and a measurement that cannot be got off
                 // the device is not evidence of anything.
                 it.measurementsTo = java.io.File(filesDir, "spoken.tsv")
+                it.language = track.language
                 narrator = it
             }
         }
         voice.enabled = describing
 
-        // The film's own clock drives everything. Four ticks a second is
-        // enough to start a line within a quarter second of its slot and
-        // cheap enough that an older stick does not drop frames for it.
+        // The film's own clock drives everything. Ten ticks a second: a
+        // line may only start if what is left of its slot still fits it,
+        // so a slow poll does not merely delay a description, it throws it
+        // away. At four ticks a second two lines of this film were lost
+        // that way. Ten is still nothing next to decoding video.
         LaunchedEffect(exo) {
             while (true) {
                 position = exo.currentPosition
                 voice.update(track, position, exo.isPlaying)
-                delay(250)
+                delay(100)
             }
         }
 
@@ -127,16 +138,7 @@ class MainActivity : ComponentActivity() {
                 },
             )
 
-            Overlay(
-                track = track,
-                saying = saying,
-                describing = describing,
-                position = position,
-                onToggle = {
-                    describing = !describing
-                    voice.enabled = describing
-                },
-            )
+            Overlay(track = track, saying = saying, position = position)
         }
     }
 
@@ -148,7 +150,9 @@ class MainActivity : ComponentActivity() {
         val exo = player ?: return super.onKeyDown(keyCode, event)
         return when (keyCode) {
             KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER -> {
-                toggle?.invoke(); true
+                describing = !describing
+                narrator?.enabled = describing
+                true
             }
             KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, KeyEvent.KEYCODE_SPACE -> {
                 exo.playWhenReady = !exo.playWhenReady; true
@@ -163,17 +167,12 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private var toggle: (() -> Unit)? = null
-
     @Composable
     private fun Overlay(
         track: DescriptionTrack,
         saying: Description?,
-        describing: Boolean,
         position: Long,
-        onToggle: () -> Unit,
     ) {
-        toggle = onToggle
         Column(
             modifier = Modifier.fillMaxSize().padding(48.dp),
             verticalArrangement = Arrangement.SpaceBetween,

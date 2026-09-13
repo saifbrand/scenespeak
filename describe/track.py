@@ -44,6 +44,9 @@ class Track:
 
     film: str
     duration: float
+    language: str = "en"
+    """BCP 47 tag the lines are written in. The player selects its voice
+    from this, so a track and the voice that reads it cannot drift apart."""
     lines: list[Line] = field(default_factory=list)
     generator: dict = field(default_factory=dict)
     stats: dict = field(default_factory=dict)
@@ -58,6 +61,7 @@ class Track:
         return {
             "film": self.film,
             "duration": round(self.duration, 3),
+            "language": self.language,
             "generator": self.generator,
             "stats": self.stats,
             "lines": [asdict(line) for line in self.lines],
@@ -76,6 +80,7 @@ class Track:
         return cls(
             film=data.get("film", ""),
             duration=float(data.get("duration", 0)),
+            language=data.get("language", "en"),
             lines=[Line(**{k: v for k, v in item.items() if k in known})
                    for item in data.get("lines", [])],
             generator=data.get("generator", {}),

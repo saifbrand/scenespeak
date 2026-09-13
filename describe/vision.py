@@ -65,6 +65,11 @@ class Request:
     the long one produces "two figures stand in a complex industrial"."""
     forbidden: list[str] = field(default_factory=list)
     """Names the writer used that the film has not said out loud yet."""
+    language: str = "en"
+    """What to write in. Audio description barely exists outside English,
+    and the film's own dialogue is not required to be in the same language
+    as the description -- a Bengali viewer may well be watching an English
+    film with Bengali description over it."""
 
     def prompt(self, calibration: speech.Calibration) -> str:
         words = speech.words_for(self.budget, calibration)
@@ -72,6 +77,12 @@ class Request:
             f"The gap is {self.budget:.1f} seconds long, which is about "
             f"{words} words when spoken aloud. Do not exceed it.",
         ]
+        if self.language and self.language.split("-")[0].lower() != "en":
+            parts.append(
+                f"Write the line in {LANGUAGES.get(self.language.split('-')[0].lower(), self.language)}"
+                " and in that language's own script. The dialogue quoted"
+                " below stays in the film's language; do not translate it"
+                " back to the listener, and do not add any English.")
         if self.before:
             parts.append("Dialogue just before this gap:\n"
                          + "\n".join(f"- {line}" for line in self.before[-3:]))
@@ -94,6 +105,18 @@ class Request:
             parts.append("Already described earlier, do not repeat:\n"
                          + "\n".join(f"- {line}" for line in self.said_already[-4:]))
         return "\n\n".join(parts)
+
+
+# Named so the request reads as a sentence rather than a language tag. Only
+# the ones a Fire TV text-to-speech engine actually has a voice for are
+# worth offering, which is checked on the device, not assumed here.
+LANGUAGES = {
+    "bn": "Bengali", "hi": "Hindi", "ur": "Urdu", "ta": "Tamil",
+    "es": "Spanish", "fr": "French", "de": "German", "it": "Italian",
+    "pt": "Portuguese", "ru": "Russian", "ar": "Arabic", "id": "Indonesian",
+    "ja": "Japanese", "ko": "Korean", "zh": "Chinese", "tr": "Turkish",
+    "nl": "Dutch", "pl": "Polish", "th": "Thai", "vi": "Vietnamese",
+}
 
 
 class StubWriter:

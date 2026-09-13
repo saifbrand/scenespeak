@@ -100,3 +100,43 @@ def test_a_slower_calibration_makes_every_line_shorter():
     assert speech.duration(line, slow) > speech.duration(line)
     assert (len(speech.trim(line, 4.0, slow).split())
             < len(speech.trim(line, 4.0).split()))
+
+
+# --- languages other than English -------------------------------------------
+
+BENGALI = "\u098f\u0995\u099c\u09a8 \u09b2\u09cb\u0995 \u09a6\u09b0\u099c\u09be \u0996\u09cb\u09b2\u09c7\u0964"
+
+
+def test_english_timing_is_unchanged_by_the_language_field():
+    line = "A woman in a red coat runs across the rooftop."
+    assert speech.duration(line, speech.Calibration(language="en")) == speech.duration(line)
+
+
+def test_a_script_the_syllable_counter_cannot_read_is_timed_by_glyph():
+    bengali = speech.Calibration(language="bn")
+    assert not bengali.counts_syllables
+    # The English counter sees no Latin letters here and would call this
+    # line instantaneous, which is the failure the glyph unit exists for.
+    assert speech.duration(BENGALI) == 0.0
+    assert speech.duration(BENGALI, bengali) > 1.0
+
+
+def test_vowel_signs_do_not_count_as_extra_beats():
+    bengali = speech.Calibration(language="bn")
+    with_signs = "\u0995\u09bf"      # consonant plus vowel sign
+    bare = "\u0995"
+    assert speech.beats(with_signs, bengali) == speech.beats(bare, bengali)
+
+
+def test_the_indic_full_stop_buys_a_pause():
+    bengali = speech.Calibration(language="bn")
+    assert speech.duration(BENGALI, bengali) > \
+        speech.duration(BENGALI.rstrip("\u0964"), bengali)
+
+
+def test_a_bengali_trim_still_never_exceeds_its_budget():
+    bengali = speech.Calibration(language="bn")
+    line = BENGALI.rstrip("\u0964") + ", " + BENGALI
+    for budget in (1.0, 2.0, 3.0, 5.0):
+        fitted = speech.trim(line, budget, bengali)
+        assert fitted == "" or speech.duration(fitted, bengali) <= budget

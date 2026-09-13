@@ -105,7 +105,11 @@ def run(sources: Sources, writer, out_dir: str = "out",
         def ask(attempt: int, too_long: str = "",
                 forbidden: list[str] | None = None) -> str:
             """One request for this slot, remembered so a re-run is free."""
-            key = Cache.key(name, slot.start, slot.budget, attempt)
+            # English keeps the key it always had, so answers already paid
+            # for stay valid; any other language is a different answer.
+            writer_key = (name if calibration.language == "en"
+                          else f"{name}/{calibration.language}")
+            key = Cache.key(writer_key, slot.start, slot.budget, attempt)
             remembered = cache.get(key)
             if remembered is not None:
                 return remembered
@@ -121,7 +125,7 @@ def run(sources: Sources, writer, out_dir: str = "out",
             written = writer.write(vision.Request(
                 start=slot.start, budget=asked_for, shots=shots,
                 before=before, after=after, too_long=too_long,
-                forbidden=forbidden or [],
+                forbidden=forbidden or [], language=calibration.language,
                 said_already=[line.text for line in lines],
             ))
             cache.put(key, written)
@@ -180,7 +184,8 @@ def run(sources: Sources, writer, out_dir: str = "out",
             trimmed=was_trimmed,
         ))
 
-    track = Track(film=sources.name, duration=duration, lines=lines)
+    track = Track(film=sources.name, duration=duration, lines=lines,
+                  language=calibration.language)
     track.generator = {
         "writer": getattr(writer, "name", "writer"),
         "frames_per_slot": frames_per_slot,

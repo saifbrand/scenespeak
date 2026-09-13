@@ -108,4 +108,15 @@ class DescriptionTrackTest {
             assertNull(long.at(index * 10_000L + 5_000))
         }
     }
+
+    @Test
+    fun `a track without a language is english`() {
+        assertEquals("en", track.language)
+    }
+
+    @Test
+    fun `a track carries its language to the voice`() {
+        val bengali = DescriptionTrack.parse("""{"film":"f","duration":10.0,"language":"bn","lines":[]}""")
+        assertEquals("bn", bengali.language)
+    }
 }

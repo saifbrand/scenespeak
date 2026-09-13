@@ -9,6 +9,8 @@ import argparse
 import json
 import sys
 
+from dataclasses import replace
+
 from describe import gaps, speech, vision
 from describe.build import Sources, run
 
@@ -31,11 +33,27 @@ def main(argv: list[str] | None = None) -> int:
                         help="only build the first N slots, for a quick look")
     parser.add_argument("--frames", type=int, default=3,
                         help="frames sampled per slot")
+    parser.add_argument("--language", default="",
+                        help="BCP 47 tag to write the description in, e.g. "
+                             "bn. Needs its own calibration and a voice on "
+                             "the device; see README.")
     parser.add_argument("--no-audio", action="store_true",
                         help="plan from subtitles alone, ignoring the stems")
     args = parser.parse_args(argv)
 
     calibration = speech.Calibration.load()
+    if args.language:
+        # A language change invalidates the timing constants, and silently
+        # reusing English ones would size every Bengali line against English
+        # syllables. Better to say so and fall back to the defaults, which
+        # the device then corrects by measurement.
+        if args.language != calibration.language:
+            print(f"calibration is for '{calibration.language}'; using "
+                  f"defaults for '{args.language}' until it is measured on "
+                  f"the device (tools/calibrate.py)")
+            calibration = speech.Calibration(language=args.language)
+        else:
+            calibration = replace(calibration, language=args.language)
     sources = FILM
     if args.no_audio:
         sources = Sources(FILM.name, FILM.video, FILM.subtitles)
