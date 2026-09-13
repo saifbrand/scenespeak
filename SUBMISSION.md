@@ -174,8 +174,8 @@ project exists at all.
 Amazon Appstore Automated Testing was the best surprise: free, no published
 app needed, and within half an hour it had run my APK on four real Fire TV
 sticks from Fire OS 5 to 8 and told me two of them could not install it.
-Without it I would have shipped an app that silently excluded every Fire TV
-Stick 4K first generation.
+Without it I would have shipped an app that could not install on the Fire TV
+Stick 4K or the second-generation Fire TV Stick.
 
 `androidx.tv:tv-material` sits alongside Compose without ceremony. D-pad
 input through `onKeyDown` worked first time. Media3's player API is clean and its
